@@ -514,10 +514,12 @@ function validStyles(styleAttr){
 	var result = '';
 	var styleArray = styleAttr.split(';');
 	angular.forEach(styleArray, function(value){
-		var v = value.split(':');
-		if(v.length == 2){
-			var key = trim(angular.lowercase(v[0]));
-			var value = trim(angular.lowercase(v[1]));
+    var i = value.indexOf(':');
+
+    if (i) {
+			var key = trim(angular.lowercase(value.substr(0, i)));
+			var value = trim(angular.lowercase(value.substr(i + 1)));
+
 			if(
 				(key === 'color' || key === 'background-color') && (
 					value.match(/^rgb\([0-9%,\. ]*\)$/i)
@@ -554,6 +556,8 @@ function validStyles(styleAttr){
 				)
 			|| // Reference #520
 				(key === 'direction' && value.match(/^ltr|rtl|initial|inherit$/))
+      ||
+        (key === 'background' || key === 'background-position' || key === 'background-size')
 			) result += key + ': ' + value + ';';
 		}
 	});
